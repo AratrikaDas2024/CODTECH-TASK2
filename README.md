@@ -1,5 +1,5 @@
 # CODTECH-TASK2
-Name: ARATRIKA DAS ID: CT6WTDS456 Domain: Java Programming Duration: 17th August to 2nd October Mentor: Muzammil Ahmed
+Name: ARATRIKA DAS ID: CT6WTDS456 Domain: Java Programming Duration: 17th August 2024 to 2nd October 2024 Mentor: Muzammil Ahmed
 
 Overview of the Project
 
