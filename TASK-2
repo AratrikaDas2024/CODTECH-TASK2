@@ -1,0 +1,293 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+class Account 
+{
+      String account_no;
+      String user_name;
+      String password;
+      double balance;
+      String account_for_money_transfer;
+      String [] transaction_history;
+      Account (String acc_no, String name, String pass)
+      {
+             account_no = acc_no;
+             user_name = name;
+             password = pass;
+             this.balance = balance;
+             account_for_money_transfer = "NIL";
+             transaction_history = new String[50];
+      }
+      String get_encryptedvalue(String pass)
+      {
+            String encrypted = "";
+            int secret_key = 8;
+            for(int i=0;i<pass.length();i++)
+            {
+                 char ch = pass.charAt(i);
+                 ch += secret_key; 
+                 encrypted = encrypted+ch;
+            }
+            password = encrypted;
+            return encrypted;
+      }
+      void update_transaction(double money, int i, int option)
+      {
+              if (option == 2)
+              {
+                    String str = money+"";
+                    transaction_history[i] = str + " Deposited";
+              }      
+              if (option == 3)
+              {
+                    String str = money+"";
+                    transaction_history[i] = str + " Withdrawn";
+              }  
+      }
+      void update_transfer_transaction(double money, String account_no, Account a, int i)
+      {
+                  String str = money + "";
+                  transaction_history[i] = str + " transferred to " + account_no;        
+      }
+      void withdraw_fund(double money)
+      {
+             if (money <= 0)
+             {
+                  System.out.println("Please withdraw a valid amount");
+                  return;
+             }
+             if (balance - money < 0)
+             {
+                  System.out.println("Not enough balance in account");
+                  return;
+             }
+             balance = balance - money;
+             System.out.println("Your Current balance is: " + balance);
+      }
+      void deposit_fund(double money, Account ob)
+      {
+             if (money < 0)
+             {
+                   System.out.println("Please deposit a valid amount");
+                   return;
+             }
+             balance = balance + money;
+             System.out.println("Your Current balance is: " + balance);
+      }
+      void transfer_money(double money, Account acc)
+      {
+            if(money <= 10)
+            {
+                 System.out.println("The minimum amount that can be transferred is 10");
+                 return;
+            }  
+            if (money > balance)
+            {
+                 System.out.println("Not enough balance is account");
+                 return;
+            }
+            balance = balance - money;
+            System.out.println("Your current balance is: " + balance);
+            acc.balance = acc.balance + money;
+      }
+      void display_transaction_history()
+      {
+            for(int i=0; transaction_history[i] != null; i++)
+            {
+                   System.out.println(transaction_history[i]);
+            }
+      }
+}
+
+class online_banking
+{
+       public static void main(String args[])
+       {
+              Account ob;
+              ArrayList<Account> account_list = new ArrayList<Account>();
+              int choice = 1, option=0, flag = 0,i=0, acc_num = 1;
+              double balance, money;
+              String name, password, pass, account_no = "Acc00001";
+              Scanner sc = new Scanner(System.in);
+              Scanner bal = new Scanner(System.in);
+              while (choice == 1)
+              {
+                    System.out.println("Enter 1 to create new Account\nEnter 2 to deposit funds\nEnter 3 to withdraw funds\nEnter 4 to tranfer money to another account\nEnter 5 to view transaction history");                
+                    option = bal.nextInt();
+                    if (option == 1)
+                    {
+                              System.out.print("Enter your name: ");
+                              name = sc.nextLine();
+                              System.out.print("Enter your password: ");
+                              password = sc.nextLine();
+                              String acc_str = acc_num + "";
+                              account_no = "Acc0000" + acc_str;
+                              acc_num++;
+                              ob = new Account(account_no, name, password);
+                              pass = ob.get_encryptedvalue(password);
+                              account_list.add(ob);
+                              System.out.println("Your Account Number is: " + ob.account_no);
+                    }
+                    if (option == 2)
+                    {
+                              System.out.print("Enter your account number: ");
+                              account_no = sc.nextLine();
+                              System.out.print("Enter your name: ");
+                              name = sc.nextLine();
+                              System.out.print("Enter your password: ");
+                              password = sc.nextLine();
+                              ob = new Account(account_no, name, password);
+                              pass = ob.get_encryptedvalue(password);
+                              for ( Account acc:account_list)
+                              {
+                                     if(acc.account_no.equals(account_no) && acc.password.equals(pass))
+                                     {
+                                            System.out.println("Account Verified");
+                                            ob = acc;
+                                            flag = 0;
+                                            break;
+                                     }
+                                     else flag = 1;
+                              }
+                              if (flag == 1)
+                              {
+                                      System.out.println("Invalid Account");
+                                      flag = 0;
+                                      break;
+                              }
+                              System.out.print("Enter the amount to be deposited: ");
+                              money = bal.nextDouble();
+                              ob.deposit_fund(money,ob);
+                              ob.update_transaction(money, i, option);
+                              i++;
+                    }
+                    if (option == 3)
+                    {
+                              System.out.print("Enter your account number: ");
+                              account_no = sc.nextLine();
+                              System.out.print("Enter your name: ");
+                              name = sc.nextLine();
+                              System.out.print("Enter your password: ");
+                              password = sc.nextLine();
+                              ob = new Account(account_no, name, password);
+                              pass = ob.get_encryptedvalue(password);
+                              for ( Account acc:account_list)
+                              {
+                                     if(acc.account_no.equals(account_no) && acc.password.equals(pass))
+                                     {
+                                            System.out.println("Account Verified");
+                                            ob = acc;
+                                            flag = 0;
+                                            break;
+                                     }
+                                     else flag = 1;
+                              }
+                              if (flag == 1)
+                              {
+                                      System.out.println("Invalid Account");
+                                      flag = 0;
+                                      continue;
+                              }
+                              System.out.print("Enter the amount to be withdrawn: ");
+                              money = bal.nextDouble();
+                              ob.withdraw_fund(money);
+                              ob.update_transaction(money, i, option);
+                              i++;
+                    }
+                    if (option == 4)
+                    {
+                              System.out.print("Enter your account number: ");
+                              account_no = sc.nextLine();
+                              System.out.print("Enter your name: ");
+                              name = sc.nextLine();
+                              System.out.print("Enter your password: ");
+                              password = sc.nextLine();
+                              ob = new Account(account_no, name, password);
+                              pass = ob.get_encryptedvalue(password);
+                              if (account_list.isEmpty() == true) 
+                              {
+                                     System.out.println("Invalid Account");                     
+                                     continue;
+                              }
+                              for (Account acc:account_list)
+                              {
+                                     if(acc.account_no.equals(account_no) && acc.password.equals(pass) && acc.user_name.equals(name))
+                                     {
+                                            System.out.println("Account Verified");
+                                            ob = acc;
+                                            flag = 0;
+                                            break;
+                                     }
+                                     else
+                                     {
+                                           System.out.println("Invalid Account");
+                                           flag = 1;
+                                     }
+                              }
+                              if (flag == 1)
+                              {
+                                     flag = 0;
+                                     continue;
+                              }
+                              System.out.print("Enter the account number for transferring money: ");
+                              account_no = sc.nextLine();
+                              Account a = new Account (account_no, "NIL", "NIL");
+                              for (Account acc:account_list)
+                              {
+                                     if(acc.account_no.equals(account_no))
+                                     {
+                                           a = acc;
+                                           flag = 0;
+                                           break;
+                                     }
+                                     else flag = 1;
+                              }
+                              if (flag == 1) 
+                              {
+                                     System.out.println("Not a valid account");
+                                     flag = 0;
+                                     continue;
+                              }
+                             if (flag == 0) 
+                             {
+                                     System.out.print("Enter the amount to be transferred: ");
+                                     money = bal.nextDouble();
+                                     ob.transfer_money(money, a);
+                                     ob.update_transfer_transaction(money, account_no, a,i); 
+                                     i++;
+                             }
+                    }
+                    if (option == 5)
+                    {
+                              System.out.print("Enter your account number: ");
+                              account_no = sc.nextLine();
+                              System.out.print("Enter your name: ");
+                              name = sc.nextLine();
+                              System.out.print("Enter your password: ");
+                              password = sc.nextLine();
+                              ob = new Account(account_no, name, password);
+                              pass = ob.get_encryptedvalue(password);
+                              for (Account acc:account_list)
+                              {
+                                     if(acc.account_no.equals(account_no) && acc.password.equals(pass))
+                                     {
+                                            System.out.println("------Transaction History------");
+                                            acc.display_transaction_history();
+                                            flag = 0;
+                                            break;
+                                     }
+                                     else flag=1;
+                              }
+                              if (flag == 1)
+                              {
+                                     System.out.println("Invalid Account");
+                                     continue;
+                              }
+                    }
+                    if (option == 0) System.out.println("Invalid Option");
+                    System.out.println("Do you want to continue?");
+                    choice = bal.nextInt();
+              }
+              
+       }
+}
