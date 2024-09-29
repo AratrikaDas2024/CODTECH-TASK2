@@ -11,3 +11,6 @@ Key Activities: Create accounts, deposit funds, transfter money between accounts
 
 
 Technologies Used: Basic to Intermediate Java Programming Skills
+
+![Screenshot 2024-09-29 222522](https://github.com/user-attachments/assets/fd20018d-e138-4d41-ba93-425df8bc1a98)
+![Screenshot 2024-09-29 222619](https://github.com/user-attachments/assets/d858fe65-6620-4a12-9e97-12a5c89bacb6)
